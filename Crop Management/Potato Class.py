@@ -2,7 +2,7 @@
 #130614
 #Potato Class
 
-from Crop_class import *
+from crop_class import *
 
 class Potato(crop): #Potato is subclass of crop, inherits from crop
     """A potato crop"""

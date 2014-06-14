@@ -36,6 +36,72 @@ class Field:
     def remove_animal(self,position):
         return self._animals.pop(position)
 
+    def report_contents(self):
+        crop_report = []
+        animal_report = []
+        for crop in self._crops:
+            crop_report.append(crop.report())
+        for animal in self._animals:
+            animal_report.append(animal.report())
+        return {"Crops": crop_report, "Animals": animal_report}
+
+    def report_needs(self):
+        food = 0
+        light = 0
+        water = 0
+
+        for crop in self._crops:
+            needs = crop.needs()
+            if needs["light need"] > light:
+                light = needs["light need"]
+            if needs["water need"] > water:
+                water = needs["water need"]
+        for animal in self._animals:
+            needs = animal.needs()
+            food += needs["food need"]
+            if needs["water need"] > water:
+                water = needs["water need"]
+
+        return {"Food":food,"Light":light,"Water":water}
+
+    def grow(self,light,food,water):
+        #grow crops (light and water available to all
+        if len(self._crops) > 0:
+            for crop in self._crops:
+                crop.grow(light,water)
+
+        #grow animals (water available to all in same amounts
+        #but food is total that must be shared
+        if len(self._animals) > 0:
+            food_required = 0
+            #get total of food required
+            for animal in self._animals:
+                needs = animal.needs()
+                food_required += needs["food need"]
+            #if more food available than needed, extra is shared
+            if food > food_required:
+                additional_food = food - food_required
+                food = food_required
+            else:
+                additional_food = 0
+                
+            #grow each animal
+            for animal in self._animals:
+                #get animals food needs
+                needs = animal.needs()
+                if food >= needs["food need"]:
+                    #remove food for this animal from total
+                    food -= needs["food need"]
+                    feed = needs["food need"]
+                    #additional food?
+                    if additional_food > 0:
+                        additional_food -= 1
+                        #add to feed for animal
+                        feed += 1
+                #grow animal
+                animal.grow(feed,water)
+            
+
 def display_crops(crop_list):
     print()
     print("The following crops are in this field:")
@@ -71,9 +137,7 @@ def remove_animal_from_field(field):
     display_animals(field._animals)
     selected_animal = select_crop_animal(len(field._animals))
     return field.remove_animal(selected_animal)
-
-
-
+    
 def main():
     new_field = Field(5,2)
     
@@ -82,11 +146,18 @@ def main():
     new_field.add_animal(Sheep("Shaun"))
     new_field.add_animal(Cow("Jim"))
 
-    harvest_crop_from_field(new_field)
-    print(new_field._crops)
-    remove_animal_from_field(new_field)
-    print(new_field._animals)
+    report = new_field.report_contents()
+    print(report["Animals"])
+    print()
+    print(report["Crops"])
     
+    report = new_field.report_needs()
+    print(report)
+    print()
+    print()
+    new_field.grow(10,10,7)
+    print(new_field.report_contents())
+
     
 if __name__ == "__main__":
     main()

@@ -8,7 +8,7 @@ class CropView(QGraphicsView):
 
     #constructor
     def __init__(self):
-        super().__init()
+        super().__init__()
 
     def resources(self,crop_type):
         #get graphics

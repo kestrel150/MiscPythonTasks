@@ -9,8 +9,10 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 from radio_button_widget_class import * #gives access to radio class
+from manual_grow_dialog_class import * #gives access to manual grow dialog class
 from Wheat_Class import *
 from Potato_Class import *
+
 
 class CropWindow(QMainWindow):
     """This class creates a window to show the growth of the crops that are simulated"""
@@ -85,6 +87,7 @@ class CropWindow(QMainWindow):
 
         #connections
         self.automatic_grow_button.clicked.connect(self.automatically_grow_crop)
+        self.manual_grow_button.clicked.connect(self.manually_grow_crop)
         
 
     def instantiate_crop(self):
@@ -103,6 +106,13 @@ class CropWindow(QMainWindow):
             light = random.randint(1,10)
             water = random.randint(1,10)
             self.simulated_crop.grow(light,water)
+        self.update_crop_view_status()
+
+    def manually_grow_crop(self):
+        manual_values_dialog = ManualGrowDialog()
+        manual_values_dialog.exec_() #run manual dialog window
+        light, water = manual_values_dialog.values()
+        self.simulated_crop.grow(light,water)
         self.update_crop_view_status()
 
     def update_crop_view_status(self):

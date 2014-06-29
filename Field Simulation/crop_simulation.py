@@ -3,6 +3,7 @@
 #Crop simulation
 
 import sys
+import random
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -81,6 +82,9 @@ class CropWindow(QMainWindow):
         #widget to hold layout
         self.view_crop_widget = QWidget()
         self.view_crop_widget.setLayout(self.grow_grid)
+
+        #connections
+        self.automatic_grow_button.clicked.connect(self.automatically_grow_crop)
         
 
     def instantiate_crop(self):
@@ -93,7 +97,23 @@ class CropWindow(QMainWindow):
         self.create_view_crop_layout(crop_type)
         self.stacked_layout.addWidget(self.view_crop_widget)
         self.stacked_layout.setCurrentIndex(1) #change visible layout
+
+    def automatically_grow_crop(self):
+        for days in range(30):
+            light = random.randint(1,10)
+            water = random.randint(1,10)
+            self.simulated_crop.grow(light,water)
+        self.update_crop_view_status()
+
+    def update_crop_view_status(self):
+        crop_status_report = self.simulated_crop.report() #gets report from crop class
+
+        #update line edit text fields
+        self.growth_line_edit.setText(str(crop_status_report["growth"]))
+        self.days_line_edit.setText(str(crop_status_report["days growing"]))
+        self.status_line_edit.setText(str(crop_status_report["status"]))
         
+                                        
         
 def main():
     crop_simulation = QApplication(sys.argv) #create new application

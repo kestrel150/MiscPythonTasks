@@ -8,6 +8,8 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 from radio_button_widget_class import * #gives access to radio class
+from Wheat_Class import *
+from Potato_Class import *
 
 class CropWindow(QMainWindow):
     """This class creates a window to show the growth of the crops that are simulated"""
@@ -34,6 +36,17 @@ class CropWindow(QMainWindow):
 
         self.setCentralWidget(self.select_crop_widget)
 
+        #connections
+        self.instantiate_button.clicked.connect(self.instantiate_crop)
+
+    def instantiate_crop(self):
+        crop_type = self.crop_radio_buttons.selected_button() # gets the radio button that was selected
+        if crop_type == 1:
+            self.simulated_crop = Wheat()
+        elif crop_type == 2:
+            self.simulated_crop = Potato()
+        print(self.simulated_crop)
+        
 def main():
     crop_simulation = QApplication(sys.argv) #create new application
     crop_window = CropWindow() #instantiate main window

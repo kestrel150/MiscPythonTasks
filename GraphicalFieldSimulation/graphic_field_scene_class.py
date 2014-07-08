@@ -1,6 +1,6 @@
 from PyQt4.QtGui import *
 
-from Field_class import *
+from Field_Class import *
 from graphic_wheat_item_class import *
 from graphic_potato_item_class import *
 from graphic_cow_item_class import *

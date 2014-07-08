@@ -1,5 +1,5 @@
 from graphic_animal_item_class import *
-from Sheep_class import *
+from Sheep_Class import *
 
 import field_resources
 

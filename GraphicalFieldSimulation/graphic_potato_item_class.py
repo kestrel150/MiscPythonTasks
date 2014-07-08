@@ -1,5 +1,5 @@
 from graphic_crop_item_class import *
-from Potato_class import *
+from Potato_Class import *
 
 import field_resources
 

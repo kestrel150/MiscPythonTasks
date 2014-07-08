@@ -1,5 +1,5 @@
 from graphic_crop_item_class import *
-from Wheat_class import *
+from Wheat_Class import *
 
 import field_resources
 
